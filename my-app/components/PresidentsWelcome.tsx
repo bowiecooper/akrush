@@ -7,9 +7,10 @@ export default function PresidentsWelcome() {
         {/* top divider line */}
         <div className="mx-auto mb-12 h-[2px] w-[80%] bg-[#4D84C6]" />
 
-        <div className="grid items-start gap-16 md:grid-cols-[420px,1fr]">
+        {/* Make image and text side by side on medium+ screens */}
+        <div className="flex flex-col md:flex-row items-start gap-16">
           {/* left image */}
-          <div className="mx-auto w-full max-w-[420px]">
+          <div className="mx-auto w-full max-w-[420px] md:mx-0">
             <div className="relative aspect-[4/5] overflow-hidden rounded-sm bg-gray-100 shadow-sm">
               <Image
                 src="/president.jpeg"
@@ -22,7 +23,7 @@ export default function PresidentsWelcome() {
           </div>
 
           {/* right content */}
-          <div className="mx-auto w-full max-w-2xl text-center md:text-left">
+          <div className="mx-auto w-full max-w-2xl text-center md:text-left md:mx-0">
             <h2 className="text-[#4D84C6] text-4xl md:text-5xl font-extrabold tracking-wide">
               PRESIDENT&apos;S WELCOME
             </h2>
