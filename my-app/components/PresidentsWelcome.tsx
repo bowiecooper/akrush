@@ -41,11 +41,26 @@ export default function PresidentsWelcome() {
               </p>
 
               <p>
-                Our brotherhood is composed of the most driven, inspiring, and talented students here
-                at the University of Michigan. Since 1987, our brothers have spanned the community
-                as leaders of several other student organizations, young entrepreneurs, achievers in
-                academia, varsity collegiate athletes, and young professionals in the business world.
+                Our brotherhood is composed of the most driven, inspiring, and talented students here 
+                at the University of Michigan. Since 1987, our brothers have spanned the community as 
+                leaders of several other student organizations, young entrepreneurs, achievers in academia, 
+                varsity collegiate athletes, and young professionals in the business world. The Phi Chapter&apos;s 
+                invaluable network connects us not only throughout campus, but across the nation and abroad. 
+                We pride ourselves on our ability to explore our mutual interests in business while building 
+                a diverse family on campus. We strive to collaborate by building on our strengths, bettering our community, 
+                and providing the resources for academic, professional, and personal success.
               </p>
+
+              <p>
+                I am incredibly excited for my 7th semester as a brother of Alpha Kappa Psi. Much of my amazing 
+                experiences here at the University of Michigan have been centered around being a member of this 
+                great organization. Alpha Kappa Psi has infinite experiences, opportunities, and friendships to offer, 
+                and I encourage you to continue your exploration by attending our rush events. Thank you for your interest 
+                and I am excited to get to know you better!
+              </p>
+
+              <p>Sincerely,</p>
+              <p>Isabella</p>
             </div>
           </div>
         </div>
