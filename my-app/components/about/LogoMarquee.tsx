@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useEffect, useState } from "react";
 
 type Logo = {
   src: string;
@@ -11,8 +12,8 @@ type Logo = {
 export default function LogoMarquee({
   title = "Backed by",
   logos,
-  speedSeconds = 18, // smaller = faster
-  logoHeight = 34,   // smaller logos
+  speedSeconds, // smaller = faster
+  logoHeight,   // smaller logos
 }: {
   title?: string;
   logos: Logo[];
@@ -21,6 +22,16 @@ export default function LogoMarquee({
 }) {
   // Duplicate to make the loop seamless
   const items = [...logos, ...logos];
+  const [isReady, setIsReady] = useState(false);
+
+  useEffect(() => {
+    // Small delay to ensure layout is calculated before animation starts
+    const timer = setTimeout(() => {
+      setIsReady(true);
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <>
@@ -28,15 +39,22 @@ export default function LogoMarquee({
         __html: `
           @keyframes marquee {
             0% {
-              transform: translateX(0);
+              transform: translate3d(0, 0, 0);
             }
             100% {
-              transform: translateX(-50%);
+              transform: translate3d(-50%, 0, 0);
             }
           }
           .marquee-track {
             animation: marquee var(--marquee-duration, 18s) linear infinite;
+            animation-play-state: paused;
             will-change: transform;
+            display: flex;
+            backface-visibility: hidden;
+            perspective: 1000px;
+          }
+          .marquee-track.ready {
+            animation-play-state: running;
           }
           @media (prefers-reduced-motion: reduce) {
             .marquee-track {
@@ -59,7 +77,7 @@ export default function LogoMarquee({
 
             {/* animated track */}
             <div
-              className="marquee-track flex w-max items-center gap-16"
+              className={`marquee-track flex w-max items-center gap-16 ${isReady ? "ready" : ""}`}
               style={
                 {
                   "--marquee-duration": `${speedSeconds}s`,

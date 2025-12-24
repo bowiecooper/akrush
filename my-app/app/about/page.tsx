@@ -1,15 +1,19 @@
 import Navbar from "@/components/Navbar";
 import AboutIntro from "@/components/about/AboutIntro";
 import LogoMarquee from "@/components/about/LogoMarquee";
+import ValueCards from "@/components/about/ValueCards";
+import FAQ from "@/components/about/FAQ";
+import Footer from "@/components/Footer";
 
 export default function AboutPage() {
   return (
     <main className="min-h-screen bg-white">
       <Navbar />
       <AboutIntro />
+      <ValueCards />
       <LogoMarquee
         title="OUR NETWORK"
-        speedSeconds={20}     // faster
+        speedSeconds={70}     // faster
         logoHeight={30}       // smaller
         logos={[
           { src: "/carouselgallery/amazon.svg", alt: "Amazon" },
@@ -41,6 +45,8 @@ export default function AboutPage() {
           { src: "/carouselgallery/rothschild.svg", alt: "Rothschild & Co" },
         ]}
       />
+      <FAQ />
+      <Footer />
     </main>
   );
 }

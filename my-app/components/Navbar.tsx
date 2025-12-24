@@ -53,7 +53,7 @@ export default function Navbar({
 
   return (
     <header className={headerClass}>
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
+      <div className="mx-auto flex w-full items-center justify-between px-6 py-5">
         <Link href="/" className="flex items-center gap-3">
           <div className="flex items-center gap-3">
             <Image
@@ -73,8 +73,7 @@ export default function Navbar({
               ["HOME", "/"],
               ["ABOUT US", "/about"],
               ["LEADERSHIP", "/leadership"],
-              ["RUSH", "/rush"],
-              ["APPLY", "/apply"],
+              ["RUSH PORTAL", "/rush"],
             ].map(([label, href]) => (
               <Link
                 key={label}
