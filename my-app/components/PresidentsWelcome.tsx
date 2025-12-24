@@ -1,0 +1,54 @@
+import Image from "next/image";
+
+export default function PresidentsWelcome() {
+  return (
+    <section className="bg-white">
+      <div className="mx-auto max-w-7xl px-6 py-16">
+        {/* top divider line */}
+        <div className="mx-auto mb-12 h-[2px] w-[80%] bg-[#4D84C6]" />
+
+        <div className="grid items-start gap-16 md:grid-cols-[420px,1fr]">
+          {/* left image */}
+          <div className="mx-auto w-full max-w-[520px]">
+            <div className="relative aspect-[4/5] overflow-hidden rounded-sm bg-gray-100 shadow-sm">
+              <Image
+                src="/president.jpeg"
+                alt="President portrait"
+                fill
+                className="object-cover"
+                priority={false}
+              />
+            </div>
+          </div>
+
+          {/* right content */}
+          <div className="mx-auto w-full max-w-2xl text-center md:text-left">
+            <h2 className="text-[#4D84C6] text-4xl md:text-5xl font-extrabold tracking-wide">
+              PRESIDENT&apos;S WELCOME
+            </h2>
+
+            <p className="mt-6 text-xl md:text-2xl font-extrabold uppercase leading-snug text-black text-center md:text-left">
+              On behalf of the brothers of the Phi Chapter here at the University of Michigan,
+              I welcome you to our fraternity&apos;s official website.
+            </p>
+
+            <div className="mt-10 space-y-8 text-[17px] leading-8 text-black/80">
+              <p>
+                As the premier business fraternity, Alpha Kappa Psi is nationally recognized as a
+                developer of principled, ethical business leaders. It is with great excitement and
+                pride that we invite you to explore our organization.
+              </p>
+
+              <p>
+                Our brotherhood is composed of the most driven, inspiring, and talented students here
+                at the University of Michigan. Since 1987, our brothers have spanned the community
+                as leaders of several other student organizations, young entrepreneurs, achievers in
+                academia, varsity collegiate athletes, and young professionals in the business world.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
