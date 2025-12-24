@@ -1,6 +1,6 @@
 import Navbar from "@/components/Navbar";
-import Hero from "@/components/Hero";
-import PresidentsWelcome from "@/components/PresidentsWelcome";
+import Hero from "@/components/home/Hero";
+import PresidentsWelcome from "@/components/home/PresidentsWelcome";
 
 export default function Page() {
   return (

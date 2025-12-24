@@ -5,7 +5,7 @@ export default function PresidentsWelcome() {
     <section className="bg-white">
       <div className="mx-auto max-w-7xl px-6 py-16">
         {/* top divider line */}
-        <div className="mx-auto mb-12 h-[2px] w-[80%] bg-[#4D84C6]" />
+        <div className="mx-auto mb-12 h-[2px] w-[100%] bg-[#4D84C6]" />
 
         {/* Make image and text side by side on medium+ screens */}
         <div className="flex flex-col md:flex-row items-start gap-16">

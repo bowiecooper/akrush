@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
+import { LinkedinIcon, InstagramIcon, FacebookIcon } from "./home/icons";
 
 type NavbarProps = {
   /**
@@ -69,20 +70,49 @@ export default function Navbar({
         <div className="flex items-center gap-8">
           <nav className="hidden md:flex items-center gap-7 text-sm font-medium">
             {[
-              ["Home", "/"],
-              ["About Us", "/about"],
-              ["Leadership", "/leadership"],
-              ["Rush", "/rush"],
-              ["Apply", "/apply"],
+              ["HOME", "/"],
+              ["ABOUT US", "/about"],
+              ["LEADERSHIP", "/leadership"],
+              ["RUSH", "/rush"],
+              ["APPLY", "/apply"],
             ].map(([label, href]) => (
               <Link
                 key={label}
                 href={href}
-                className="text-[#E9D8A6] hover:text-white transition-colors"
+                className="text-[#E9D8A6] hover:text-white font-bold transition-all duration-200 hover:-translate-y-1"
               >
                 {label}
               </Link>
             ))}
+            <div className="flex items-center gap-4 ml-2">
+              <Link
+                href="https://www.instagram.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#E9D8A6] hover:text-pink-400 transition-all duration-200 hover:-translate-y-1"
+                aria-label="Instagram"
+              >
+                <InstagramIcon />
+              </Link>
+              <Link
+                href="https://www.linkedin.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#E9D8A6] hover:text-sky-400 transition-all duration-200 hover:-translate-y-1"
+                aria-label="LinkedIn"
+              >
+                <LinkedinIcon />
+              </Link>
+              <Link
+                href="https://www.facebook.com/akpsiphi"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#E9D8A6] hover:text-blue-600 transition-all duration-200 hover:-translate-y-1"
+                aria-label="Facebook"
+              >
+                <FacebookIcon />
+              </Link>
+            </div>
           </nav>
         </div>
       </div>

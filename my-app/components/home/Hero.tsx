@@ -5,7 +5,7 @@ export default function Hero() {
   return (
     <section className="relative">
       {/* Image + overlay */}
-      <div className="relative h-[520px] w-full overflow-hidden">
+      <div className="relative h-[520px] md:h-screen w-full overflow-hidden">
         <Image
           src="/hero.jpeg"
           alt="Group photo"
@@ -23,7 +23,7 @@ export default function Hero() {
             ALPHA KAPPA PSI
           </h1>
           <p className="mt-4 text-white/85 text-base md:text-lg font-medium">
-            Michigan’s Premier Business Fraternity
+            Shaping the world's next ethical, skilled, and resourceful business leaders.
           </p>
 
           <div className="mt-8 flex justify-center">
@@ -31,7 +31,7 @@ export default function Hero() {
               href="/apply"
               className="inline-flex items-center justify-center rounded-md bg-[#4D84C6] px-7 py-3 text-sm font-semibold text-white shadow-sm hover:bg-[#3E73B3] transition-colors"
             >
-              FALL ’25 APPLICATION
+              WINTER ’26 APPLICATION
             </Link>
           </div>
         </div>
