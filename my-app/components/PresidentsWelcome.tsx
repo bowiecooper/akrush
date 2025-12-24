@@ -9,7 +9,7 @@ export default function PresidentsWelcome() {
 
         <div className="grid items-start gap-16 md:grid-cols-[420px,1fr]">
           {/* left image */}
-          <div className="mx-auto w-full max-w-[520px]">
+          <div className="mx-auto w-full max-w-[420px]">
             <div className="relative aspect-[4/5] overflow-hidden rounded-sm bg-gray-100 shadow-sm">
               <Image
                 src="/president.jpeg"

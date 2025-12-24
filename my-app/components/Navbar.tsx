@@ -1,18 +1,71 @@
-import Link from "next/link";
-import Image from "next/image"
-import { SiInstagram, SiFacebook } from "@icons-pack/react-simple-icons";
-import { LinkedinIcon } from "./icons";
+"use client";
 
-export default function Navbar() {
+import Link from "next/link";
+import Image from "next/image";
+import { useEffect, useMemo, useState } from "react";
+
+type NavbarProps = {
+  /**
+   * Pixels scrolled before navbar becomes opaque.
+   * Example: 24 means after ~24px, background appears.
+   */
+  solidAfter?: number;
+
+  /**
+   * Pixels scrolled before navbar hides.
+   * Example: 420 means after 420px, navbar hides.
+   */
+  hideAfter?: number;
+};
+
+export default function Navbar({
+  solidAfter = 24,
+  hideAfter = 520,
+}: NavbarProps) {
+  const [y, setY] = useState(0);
+
+  useEffect(() => {
+    const onScroll = () => setY(window.scrollY || 0);
+    onScroll(); // initialize
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const isSolid = y > solidAfter;
+  const isHidden = y > hideAfter;
+
+  const headerClass = useMemo(() => {
+    // Base: fixed overlay on top of page
+    const base =
+      "fixed inset-x-0 top-0 z-50 transition-all duration-300 will-change-transform";
+
+    // Transparent vs solid background
+    const bg = isSolid
+      ? "bg-[#0B1B4B]/95 backdrop-blur supports-[backdrop-filter]:bg-[#0B1B4B]/85 shadow-sm"
+      : "bg-transparent";
+
+    // Hidden after far scroll
+    const visibility = isHidden ? "-translate-y-full opacity-0" : "translate-y-0 opacity-100";
+
+    return `${base} ${bg} ${visibility}`;
+  }, [isSolid, isHidden]);
+
   return (
-    <header className="bg-[#0B1B4B]">
+    <header className={headerClass}>
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
-        {/* Brand */}
         <Link href="/" className="flex items-center gap-3">
-          <Image src="/logo.png" alt="Alpha Kappa Psi Seal" width={200} height={200} />
+          <div className="flex items-center gap-3">
+            <Image
+              src="/logo.webp"
+              alt="Alpha Kappa Psi"
+              width={100}
+              height={36}
+              className="h-9 w-20"
+              priority
+            />
+          </div>
         </Link>
 
-        {/* Nav + social */}
         <div className="flex items-center gap-8">
           <nav className="hidden md:flex items-center gap-7 text-sm font-medium">
             {[
@@ -31,18 +84,6 @@ export default function Navbar() {
               </Link>
             ))}
           </nav>
-
-          <div className="flex items-center gap-4 text-[#E9D8A6]">
-            <Link href="#" aria-label="Instagram" className="hover:text-white transition-colors">
-              <SiInstagram size={20} />
-            </Link>
-            <Link href="#" aria-label="LinkedIn" className="hover:text-white transition-colors">
-              <LinkedinIcon />
-            </Link>
-            <Link href="#" aria-label="Facebook" className="hover:text-white transition-colors">
-              <SiFacebook size={20} />
-            </Link>
-          </div>
         </div>
       </div>
     </header>
