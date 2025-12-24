@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image"
 import { SiInstagram, SiFacebook } from "@icons-pack/react-simple-icons";
 import { LinkedinIcon } from "./icons";
 
@@ -8,10 +9,7 @@ export default function Navbar() {
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
         {/* Brand */}
         <Link href="/" className="flex items-center gap-3">
-          <span className="text-[#F2C14E] text-3xl font-bold leading-none">Φ</span>
-          <span className="text-white text-xl font-semibold tracking-wide">
-            Alpha Kappa Psi
-          </span>
+          <Image src="/logo.png" alt="Alpha Kappa Psi Seal" width={200} height={200} />
         </Link>
 
         {/* Nav + social */}
