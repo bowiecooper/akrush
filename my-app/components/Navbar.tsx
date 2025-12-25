@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
-import { LinkedinIcon, InstagramIcon, FacebookIcon } from "./home/icons";
+import { usePathname } from "next/navigation";
 
 type NavbarProps = {
   /**
@@ -17,13 +17,23 @@ type NavbarProps = {
    * Example: 420 means after 420px, navbar hides.
    */
   hideAfter?: number;
+
+  /**
+   * On home page, pixels scrolled before logo appears.
+   * Example: 400 means logo shows after scrolling 400px.
+   */
+  showLogoAfter?: number;
 };
 
 export default function Navbar({
   solidAfter = 24,
   hideAfter = 520,
+  showLogoAfter = 400,
 }: NavbarProps) {
   const [y, setY] = useState(0);
+  const [isDesktop, setIsDesktop] = useState(false);
+  const pathname = usePathname();
+  const isHomePage = pathname === "/";
 
   useEffect(() => {
     const onScroll = () => setY(window.scrollY || 0);
@@ -32,8 +42,17 @@ export default function Navbar({
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  useEffect(() => {
+    const checkDesktop = () => setIsDesktop(window.innerWidth >= 768);
+    checkDesktop(); // initialize
+    window.addEventListener("resize", checkDesktop);
+    return () => window.removeEventListener("resize", checkDesktop);
+  }, []);
+
   const isSolid = y > solidAfter;
-  const isHidden = y > hideAfter;
+  // Only hide on mobile view, never hide on desktop
+  const isHidden = !isDesktop && y > hideAfter;
+  const showLogo = !isHomePage || y > showLogoAfter;
 
   const headerClass = useMemo(() => {
     // Base: fixed overlay on top of page
@@ -51,17 +70,28 @@ export default function Navbar({
     return `${base} ${bg} ${visibility}`;
   }, [isSolid, isHidden]);
 
+  // Don't render navbar on mobile view at all
+  if (!isDesktop) {
+    return null;
+  }
+
   return (
     <header className={headerClass}>
       <div className="mx-auto flex w-full items-center justify-between px-6 py-5">
         <Link href="/" className="flex items-center gap-3">
-          <div className="flex items-center gap-3">
+          <div
+            className={`flex items-center gap-3 transition-all duration-500 ${
+              showLogo
+                ? "opacity-100 translate-x-0"
+                : "opacity-0 -translate-x-4 pointer-events-none"
+            }`}
+          >
             <Image
-              src="/logo.webp"
+              src="/AKPsi LogoONLY W+Gold (1).png"
               alt="Alpha Kappa Psi"
               width={100}
               height={36}
-              className="h-9 w-20"
+              className="h-9 w-auto"
               priority
             />
           </div>
@@ -83,35 +113,6 @@ export default function Navbar({
                 {label}
               </Link>
             ))}
-            <div className="flex items-center gap-4 ml-2">
-              <Link
-                href="https://www.instagram.com/akpsi_umich/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[#E9D8A6] hover:text-pink-400 transition-all duration-200 hover:-translate-y-1"
-                aria-label="Instagram"
-              >
-                <InstagramIcon />
-              </Link>
-              <Link
-                href="https://www.linkedin.com/company/umichakpsi/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[#E9D8A6] hover:text-sky-400 transition-all duration-200 hover:-translate-y-1"
-                aria-label="LinkedIn"
-              >
-                <LinkedinIcon />
-              </Link>
-              <Link
-                href="https://www.facebook.com/akpsiphi"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[#E9D8A6] hover:text-blue-600 transition-all duration-200 hover:-translate-y-1"
-                aria-label="Facebook"
-              >
-                <FacebookIcon />
-              </Link>
-            </div>
           </nav>
         </div>
       </div>

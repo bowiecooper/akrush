@@ -32,21 +32,44 @@ export default function RushPage() {
       <Navbar />
       
       {/* Hero Section */}
-      <section className="min-h-screen flex flex-col bg-[#E5F2FF] pt-20 md:pt-32">
-        <div className="flex-1 flex items-center justify-center pt-12 md:pt-20">
+      <section
+        className="min-h-screen flex flex-col pt-20 md:pt-32 relative"
+        style={{
+          background: `
+            linear-gradient(to bottom, rgba(74, 109, 149, 0.9) 0%, rgba(232, 214, 190, 0.9) 100%),
+            url('/noise.svg')
+          `,
+          backgroundColor: '#2C4563'
+        }}
+      >
+        {/* Cross grid overlay */}
+        <div
+          className="absolute inset-0 pointer-events-none z-0"
+          style={{
+            opacity: 0.05,
+            backgroundImage: `
+              radial-gradient(circle, #d4d4d4 8px, transparent 1px)
+            `,
+            backgroundSize: '24px 24px',
+            backgroundPosition: 'center',
+            mixBlendMode: 'normal'
+          }}
+        />
+
+        <div className="flex-1 flex items-center justify-center pt-12 md:pt-20 relative z-10">
           <div className="text-center px-6">
-            <h1 className="text-4xl md:text-6xl font-extrabold text-[#4D84C6] mb-6">
+            <h1 className="text-4xl md:text-6xl font-extrabold text-white mb-6">
               RUSH
             </h1>
-            <h2 className="text-2xl md:text-3xl font-normal text-black mb-4">
+            <h2 className="text-2xl md:text-3xl font-normal text-white mb-4">
               Welcome to rush.
             </h2>
-            <p className="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto">
+            <p className="text-lg md:text-xl text-white/80 max-w-2xl mx-auto">
               You've come to the right place and we can't wait to meet you.
             </p>
           </div>
         </div>
-        <div className="flex flex-col items-center gap-4 pb-16 md:pb-24">
+        <div className="flex flex-col items-center gap-4 pb-16 md:pb-24 relative z-10">
           <button
             className="px-8 py-4 bg-[#4D84C6] text-white font-bold text-lg rounded-lg hover:bg-[#2f65a3] transition-colors duration-200 flex items-center gap-2"
           >
@@ -96,8 +119,22 @@ export default function RushPage() {
       </div>
 
       {/* Rush Schedule Section */}
-      <section className="bg-[#E5F2FF] py-20">
-        <div className="mx-auto max-w-7xl px-6">
+      <section className="bg-[#E5F2FF] py-20 relative">
+        {/* Grid pattern overlay */}
+        <div
+          className="absolute inset-0 pointer-events-none z-0"
+          style={{
+            opacity: 0.05,
+            backgroundImage: `
+              radial-gradient(circle, #d4d4d4 8px, transparent 1px)
+            `,
+            backgroundSize: '24px 24px',
+            backgroundPosition: 'center',
+            mixBlendMode: 'normal'
+          }}
+        />
+
+        <div className="mx-auto max-w-7xl px-6 relative z-10">
           <h2 className="text-3xl md:text-4xl font-extrabold text-[#4D84C6] text-center mb-12">
             RUSH SCHEDULE
           </h2>
