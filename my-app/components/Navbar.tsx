@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useEffect, useMemo, useState } from "react";
-import { usePathname } from "next/navigation";
+import { useEffect, useMemo, useState, useRef } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
 
 type NavbarProps = {
   /**
@@ -32,7 +33,14 @@ export default function Navbar({
 }: NavbarProps) {
   const [y, setY] = useState(0);
   const [isDesktop, setIsDesktop] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [authChecked, setAuthChecked] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [userName, setUserName] = useState<string | null>(null);
+  const isLoggingOutRef = useRef(false);
   const pathname = usePathname();
+  const router = useRouter();
+  const supabase = createClient();
   const isHomePage = pathname === "/";
 
   useEffect(() => {
@@ -48,6 +56,86 @@ export default function Navbar({
     window.addEventListener("resize", checkDesktop);
     return () => window.removeEventListener("resize", checkDesktop);
   }, []);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      setIsLoggedIn(!!user);
+      if (user) {
+        // Get user name from user_metadata (Google OAuth should provide this)
+        const fullName = user.user_metadata?.full_name || 
+                        user.user_metadata?.name || 
+                        user.email?.split("@")[0] || 
+                        "there";
+        // Extract just the first name
+        const firstName = fullName.split(" ")[0];
+        setUserName(firstName);
+      }
+      setAuthChecked(true);
+    };
+
+    checkAuth();
+
+    // Listen for auth state changes
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      // Don't update logged in state if we're in the middle of logging out
+      // This keeps the links visible until the redirect happens
+      if (!isLoggingOutRef.current) {
+        setIsLoggedIn(!!session?.user);
+        if (session?.user) {
+          // Get user name from user_metadata (Google OAuth should provide this)
+          const fullName = session.user.user_metadata?.full_name || 
+                          session.user.user_metadata?.name || 
+                          session.user.email?.split("@")[0] || 
+                          "there";
+          // Extract just the first name
+          const firstName = fullName.split(" ")[0];
+          setUserName(firstName);
+        } else {
+          setUserName(null);
+        }
+        setAuthChecked(true);
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [supabase]);
+
+  const getTimeOfDay = () => {
+    const hour = new Date().getHours();
+    // Morning: 6AM - 12PM
+    if (hour >= 6 && hour < 12) {
+      return { greeting: "morning", emoji: "☀️" };
+    } 
+    // Afternoon: 12PM - 6PM
+    else if (hour >= 12 && hour < 18) {
+      return { greeting: "afternoon", emoji: "☀️" };
+    } 
+    // Evening: 6PM - 10PM
+    else if (hour >= 18 && hour < 22) {
+      return { greeting: "evening", emoji: "🌙" };
+    } 
+    // Night: 10PM - 6AM (covers 22:00-23:59 and 0:00-5:59)
+    else {
+      return { greeting: "night", emoji: "🌙" };
+    }
+  };
+
+  const handleLogout = async () => {
+    setIsLoggingOut(true);
+    isLoggingOutRef.current = true;
+    // Small delay to ensure the loading screen appears before auth state changes
+    await new Promise(resolve => setTimeout(resolve, 100));
+    await supabase.auth.signOut();
+    router.push("/");
+    router.refresh();
+  };
 
   const isSolid = y > solidAfter;
   // Only hide on mobile view, never hide on desktop
@@ -113,6 +201,31 @@ export default function Navbar({
                 {label}
               </Link>
             ))}
+            {authChecked && (isLoggedIn || isLoggingOut) && (
+              <>
+                <Link
+                  href="/dashboard"
+                  className="text-[#E9D8A6] hover:text-white transition-colors"
+                >
+                  DASHBOARD
+                </Link>
+                {userName && (
+                  <span className="text-[#E9D8A6] text-sm font-bold flex items-center gap-1.5">
+                    <span>{getTimeOfDay().emoji}</span>
+                    <span>
+                      Good {getTimeOfDay().greeting}, {userName}
+                    </span>
+                  </span>
+                )}
+                <button
+                  onClick={handleLogout}
+                  className="text-[#E9D8A6] hover:text-white transition-colors cursor-pointer"
+                  disabled={isLoggingOut}
+                >
+                  LOGOUT
+                </button>
+              </>
+            )}
           </nav>
         </div>
       </div>

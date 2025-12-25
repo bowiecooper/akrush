@@ -43,14 +43,14 @@ export default function LoginPage() {
     <main className="min-h-screen bg-white">
       <Navbar />
       
-      <section className="min-h-[80vh] flex items-center justify-center bg-[#E5F2FF] py-20">
+      <section className="min-h-[80vh] flex items-center justify-center bg-[#D4E8FF] py-20">
         <div className="max-w-md w-full mx-auto px-6">
           <div className="bg-white rounded-xl shadow-lg p-8 text-center">
             <h1 className="text-3xl md:text-4xl font-extrabold text-[#4D84C6] mb-4">
               Sign In
             </h1>
             <p className="text-base md:text-lg text-black/70 mb-8">
-              Sign in with your @umich.edu email to access the rush portal.
+              Welcome! This is the first semester we will be using this new login system. Please sign in with your @umich.edu email to get started.
             </p>
             
             {error && (
@@ -64,7 +64,7 @@ export default function LoginPage() {
             </div>
             
             <p className="mt-6 text-sm text-gray-500">
-              By signing in, you agree to use your University of Michigan email address.
+              Please note that if you do not have a @umich.edu email address, you will not be able to access the rush portal. Reach out to joshxie@umich.edu if you run into any issues.
             </p>
           </div>
         </div>

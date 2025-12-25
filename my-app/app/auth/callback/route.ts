@@ -17,7 +17,7 @@ export async function GET(request: Request) {
         return NextResponse.redirect(`${origin}/auth/error`)
       }
       
-      // Redirect to dashboard or home page
+      // Redirect to dashboard
       return NextResponse.redirect(`${origin}/dashboard`)
     }
   }
