@@ -68,7 +68,7 @@ export default function Navbar({
         </Link>
 
         <div className="flex items-center gap-8">
-          <nav className="hidden md:flex items-center gap-7 text-sm font-medium">
+          <nav className="hidden md:flex items-center gap-7 text-sm font-bold">
             {[
               ["HOME", "/"],
               ["ABOUT US", "/about"],
@@ -78,7 +78,7 @@ export default function Navbar({
               <Link
                 key={label}
                 href={href}
-                className="text-[#E9D8A6] hover:text-white font-bold transition-all duration-200 hover:-translate-y-1"
+                className="text-[#E9D8A6] hover:text-white transition-colors"
               >
                 {label}
               </Link>

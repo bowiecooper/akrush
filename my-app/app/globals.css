@@ -3,19 +3,66 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+
+  /* Colors needed for aurora effect */
+  --white: #ffffff;
+  --black: #000000;
+  --transparent: transparent;
+
+  /* Brand colors for aurora */
+  --navy: #1052AB;
+  --navy-light: #4A7BD9;
+  --gold: #E9D8A6;
+  --tan: #E8D6BE;
+
+  /* Keep original colors as fallbacks */
+  --blue-300: #93c5fd;
+  --blue-400: #60a5fa;
+  --blue-500: #3b82f6;
+  --indigo-300: #a5b4fc;
+  --violet-200: #ddd6fe;
 }
 
-@theme inline {
+@keyframes aurora {
+  from {
+    background-position: 50% 50%, 50% 50%;
+  }
+  to {
+    background-position: 350% 50%, 350% 50%;
+  }
+}
+
+@theme {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-inter);
   --font-mono: var(--font-geist-mono);
+
+  --animate-aurora: aurora 60s linear infinite;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+
+    /* Dark mode colors for aurora */
+    --white: #ffffff;
+    --black: #000000;
+    --transparent: transparent;
+
+    /* Brand colors for aurora */
+    --navy: #1052AB;
+    --navy-light: #4A7BD9;
+    --gold: #E9D8A6;
+    --tan: #E8D6BE;
+
+    /* Keep original colors as fallbacks */
+    --blue-300: #93c5fd;
+    --blue-400: #60a5fa;
+    --blue-500: #3b82f6;
+    --indigo-300: #a5b4fc;
+    --violet-200: #ddd6fe;
   }
 }
 
