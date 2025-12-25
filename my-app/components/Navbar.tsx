@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
+import { LinkedinIcon, InstagramIcon, FacebookIcon } from "./home/icons";
 
 type NavbarProps = {
   /**
@@ -52,7 +53,7 @@ export default function Navbar({
 
   return (
     <header className={headerClass}>
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
+      <div className="mx-auto flex w-full items-center justify-between px-6 py-5">
         <Link href="/" className="flex items-center gap-3">
           <div className="flex items-center gap-3">
             <Image
@@ -69,20 +70,48 @@ export default function Navbar({
         <div className="flex items-center gap-8">
           <nav className="hidden md:flex items-center gap-7 text-sm font-bold">
             {[
-              ["Home", "/"],
-              ["About Us", "/about"],
-              ["Leadership", "/leadership"],
-              ["Rush", "/rush"],
-              ["Apply", "/apply"],
+              ["HOME", "/"],
+              ["ABOUT US", "/about"],
+              ["OUR MEMBERS", "/members"],
+              ["RUSH", "/rush"],
             ].map(([label, href]) => (
               <Link
                 key={label}
                 href={href}
-                className="text-[#E9D8A6] hover:text-white hover:bg-[#E9D8A6]/10 transition-all px-4 py-2 rounded-full border border-[#E9D8A6]/30"
+                className="text-[#E9D8A6] hover:text-white transition-colors"
               >
                 {label}
               </Link>
             ))}
+            <div className="flex items-center gap-4 ml-2">
+              <Link
+                href="https://www.instagram.com/akpsi_umich/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#E9D8A6] hover:text-pink-400 transition-all duration-200 hover:-translate-y-1"
+                aria-label="Instagram"
+              >
+                <InstagramIcon />
+              </Link>
+              <Link
+                href="https://www.linkedin.com/company/umichakpsi/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#E9D8A6] hover:text-sky-400 transition-all duration-200 hover:-translate-y-1"
+                aria-label="LinkedIn"
+              >
+                <LinkedinIcon />
+              </Link>
+              <Link
+                href="https://www.facebook.com/akpsiphi"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#E9D8A6] hover:text-blue-600 transition-all duration-200 hover:-translate-y-1"
+                aria-label="Facebook"
+              >
+                <FacebookIcon />
+              </Link>
+            </div>
           </nav>
         </div>
       </div>
