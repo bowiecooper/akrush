@@ -7,14 +7,18 @@ import Image from "next/image";
 export default function RouteTransitionLoader() {
   const pathname = usePathname();
   const [isLoading, setIsLoading] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
   const prevPathnameRef = useRef<string | null>(null);
 
   useEffect(() => {
     // Only show loading when pathname actually changes (not on initial mount)
     if (prevPathnameRef.current !== null && prevPathnameRef.current !== pathname) {
       setIsLoading(true);
+      setIsVisible(true);
       const timer = setTimeout(() => {
-        setIsLoading(false);
+        // Fade out
+        setIsVisible(false);
+        setTimeout(() => setIsLoading(false), 300);
       }, 500);
       prevPathnameRef.current = pathname;
       return () => clearTimeout(timer);
@@ -36,6 +40,7 @@ export default function RouteTransitionLoader() {
             const linkPathname = url.pathname;
             if (linkPathname !== pathname) {
               setIsLoading(true);
+              setIsVisible(true);
             }
           }
         } catch {
@@ -55,7 +60,7 @@ export default function RouteTransitionLoader() {
   if (!isLoading) return null;
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-[#E5F2FF]">
+    <div className={`fixed inset-0 z-[100] flex items-center justify-center bg-[#E5F2FF] transition-opacity duration-300 ${isVisible ? "opacity-100" : "opacity-0"}`}>
       <div className="flex flex-col items-center gap-6">
         {/* Logo above spinner */}
         <div className="w-32 h-12 relative">

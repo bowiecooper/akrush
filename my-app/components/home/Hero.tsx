@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 export default function Hero() {
   const sentences = [
@@ -12,6 +12,8 @@ export default function Hero() {
   ];
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isVisible, setIsVisible] = useState(true);
+  const [imageOffset, setImageOffset] = useState(0);
+  const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -25,17 +27,41 @@ export default function Hero() {
     return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!sectionRef.current) return;
+      
+      const rect = sectionRef.current.getBoundingClientRect();
+      const scrollProgress = Math.max(0, -rect.top);
+      // Move image upward as user scrolls down (opposite direction)
+      setImageOffset(scrollProgress * 0.5); // 0.5 is the parallax speed multiplier
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll(); // Initial call
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
-    <section className="relative">
+    <section ref={sectionRef} className="relative">
       {/* Image + overlay */}
       <div className="relative h-[520px] md:h-screen w-full overflow-hidden">
-        <Image
-          src="/hero.jpeg"
-          alt="Group photo"
-          fill
-          priority
-          className="object-cover"
-        />
+        <div
+          style={{
+            transform: `translateY(${imageOffset}px)`,
+            transition: "transform 0.1s ease-out",
+          }}
+          className="absolute inset-0"
+        >
+          <Image
+            src="/hero.jpeg"
+            alt="Group photo"
+            fill
+            priority
+            className="object-cover"
+          />
+        </div>
         <div className="absolute inset-0 bg-black/55" />
       </div>
 

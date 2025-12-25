@@ -28,3 +28,16 @@ body {
   color: var(--foreground);
   font-family: var(--font-inter), sans-serif;
 }
+
+@keyframes bounce-slow {
+  0%, 90%, 100% {
+    transform: translateY(0);
+  }
+  95% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-bounce-slow {
+  animation: bounce-slow 4s ease-in-out infinite;
+}

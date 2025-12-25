@@ -22,7 +22,7 @@ export default function Footer() {
               href="mailto:vp-external@akpsi-phi.com"
               className="text-[#E9D8A6] hover:text-white transition-colors text-sm md:text-base"
             >
-              contact@akpsiphi.org
+              vp-external@akpsi-phi.com
             </a>
           </div>
 

@@ -72,8 +72,8 @@ export default function Navbar({
             {[
               ["HOME", "/"],
               ["ABOUT US", "/about"],
-              ["LEADERSHIP", "/leadership"],
-              ["RUSH PORTAL", "/rush"],
+              ["OUR MEMBERS", "/members"],
+              ["RUSH", "/rush"],
             ].map(([label, href]) => (
               <Link
                 key={label}
@@ -85,7 +85,7 @@ export default function Navbar({
             ))}
             <div className="flex items-center gap-4 ml-2">
               <Link
-                href="https://www.instagram.com"
+                href="https://www.instagram.com/akpsi_umich/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-[#E9D8A6] hover:text-pink-400 transition-all duration-200 hover:-translate-y-1"
@@ -94,7 +94,7 @@ export default function Navbar({
                 <InstagramIcon />
               </Link>
               <Link
-                href="https://www.linkedin.com"
+                href="https://www.linkedin.com/company/umichakpsi/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-[#E9D8A6] hover:text-sky-400 transition-all duration-200 hover:-translate-y-1"

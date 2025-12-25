@@ -14,7 +14,7 @@ export default function ValueCards() {
       imageSrc: undefined, // Placeholder for image
     },
     {
-      title: "Leadership",
+      title: "Members",
       description: "From pledging to brotherhood, the opportunities to lead and grow as a leader are endless. From running events to leading committees, there is always a way to get involved and make a difference.",
       imageSrc: undefined, // Placeholder for image
     },
