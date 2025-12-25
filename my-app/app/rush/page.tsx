@@ -69,12 +69,13 @@ export default function RushPage() {
             </p>
           </div>
         </div>
-        <div className="flex flex-col items-center gap-4 pb-16 md:pb-24 relative z-10">
-          <button
+        <div className="flex flex-col items-center gap-4 pb-16 md:pb-24">
+          <a
+            href="/auth/login"
             className="px-8 py-4 bg-[#4D84C6] text-white font-bold text-lg rounded-lg hover:bg-[#2f65a3] transition-colors duration-200 flex items-center gap-2"
           >
             ACCESS PORTAL
-          </button>
+          </a>
           <button
             onClick={handleApplyClick}
             className="px-8 py-4 bg-[#4D84C6] text-white font-bold text-lg rounded-lg hover:bg-[#2f65a3] transition-colors duration-200 animate-bounce-slow flex items-center gap-2"
@@ -207,7 +208,7 @@ export default function RushPage() {
                 What are you waiting for? Apply now to start your journey with AKPsi!
           </p>
           <a
-            href="#"
+            href="/auth/login"
             className="inline-block px-8 py-4 bg-[#4D84C6] text-white font-bold text-lg rounded-lg hover:bg-[#2f65a3] transition-colors duration-200"
           >
             I'M READY
