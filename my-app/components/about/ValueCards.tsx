@@ -11,10 +11,10 @@ export default function ValueCards() {
     {
       title: "Friendship",
       description: "The people you meet will go on to be your closest friends, roomates, study buddies, and everything in between. The lifelong friendships you make will be the most valuable aseets you take away from AKPsi.",
-      imageSrc: undefined, // Placeholder for image
+      imageSrc: "/brotherhoodphotos/photo9.jpeg",
     },
     {
-      title: "Members",
+      title: "Leadership",
       description: "From pledging to brotherhood, the opportunities to lead and grow as a leader are endless. From running events to leading committees, there is always a way to get involved and make a difference.",
       imageSrc: undefined, // Placeholder for image
     },

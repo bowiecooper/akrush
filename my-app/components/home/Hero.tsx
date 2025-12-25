@@ -6,7 +6,7 @@ import { useEffect, useState, useRef } from "react";
 
 export default function Hero() {
   const sentences = [
-    "Michigan's Oldest and Premier Business Fraternity",
+    "Michigan's Premier Professional Business Fraternity",
     "Shaping future ethical, skilled, and experienced business leaders",
     "Creating lifelong friendships and connections",
   ];

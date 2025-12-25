@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
-type MembersView = "BOARD" | "DIRECTORS" | "MEMBERS";
+type MembersView = "BOARD" | "DIRECTORS" | "ACTIVES";
 
 export default function MembersPage() {
   const [view, setView] = useState<MembersView>("BOARD");
@@ -56,7 +56,7 @@ export default function MembersPage() {
           {/* Toggle buttons */}
           <div className="mt-10 flex justify-center">
             <div className="inline-flex rounded-full bg-[#0B1B4B]/5 p-1 gap-1">
-              {(["BOARD", "DIRECTORS", "MEMBERS"] as MembersView[]).map((label) => {
+              {(["BOARD", "DIRECTORS", "ACTIVES"] as MembersView[]).map((label) => {
                 const isActive = view === label;
                 return (
                   <button
@@ -97,7 +97,7 @@ export default function MembersPage() {
               </div>
             )}
 
-            {view === "MEMBERS" && (
+            {view === "ACTIVES" && (
               <div className="text-center text-black/80">
                 <p className="text-lg md:text-xl font-semibold">Members</p>
                 <p className="mt-3 text-sm md:text-base max-w-3xl mx-auto">
