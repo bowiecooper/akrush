@@ -4,7 +4,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import { usePathname } from "next/navigation";
-import { LinkedinIcon, InstagramIcon, FacebookIcon } from "./home/icons";
 
 type NavbarProps = {
   /**
@@ -114,35 +113,6 @@ export default function Navbar({
                 {label}
               </Link>
             ))}
-            <div className="flex items-center gap-4 ml-2">
-              <Link
-                href="https://www.instagram.com/akpsi_umich/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[#E9D8A6] hover:text-pink-400 transition-all duration-200 hover:-translate-y-1"
-                aria-label="Instagram"
-              >
-                <InstagramIcon />
-              </Link>
-              <Link
-                href="https://www.linkedin.com/company/umichakpsi/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[#E9D8A6] hover:text-sky-400 transition-all duration-200 hover:-translate-y-1"
-                aria-label="LinkedIn"
-              >
-                <LinkedinIcon />
-              </Link>
-              <Link
-                href="https://www.facebook.com/akpsiphi"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[#E9D8A6] hover:text-blue-600 transition-all duration-200 hover:-translate-y-1"
-                aria-label="Facebook"
-              >
-                <FacebookIcon />
-              </Link>
-            </div>
           </nav>
         </div>
       </div>
