@@ -59,7 +59,16 @@ export default function AboutIntro() {
   }, []);
 
   return (
-    <section className="relative bg-[#1E3A6F] text-white">
+    <section
+      className="relative text-white"
+      style={{
+        background: `
+          linear-gradient(to bottom, rgba(74, 109, 149, 0.9) 0%, rgba(232, 214, 190, 0.9) 100%),
+          url('/noise.svg')
+        `,
+        backgroundColor: '#2C4563'
+      }}
+    >
       <div className="min-h-screen flex flex-col items-center justify-center px-6 pt-32 pb-16">
         <div className="max-w-3xl text-center mb-12">
           <h1 className="text-4xl md:text-6xl font-extrabold tracking-wide">

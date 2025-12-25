@@ -8,7 +8,7 @@ export default function Footer() {
           {/* Logo placeholder */}
           <div className="w-32 h-12 relative">
             <Image
-              src="/logo.webp"
+              src="/AKPsi LogoONLY W+Gold (1).png"
               alt="Alpha Kappa Psi"
               width={128}
               height={48}
