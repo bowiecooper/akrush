@@ -32,6 +32,7 @@ export async function updateProfile(formData: FormData) {
   const major = formData.get("major")?.toString() || null;
   const major2 = formData.get("major2")?.toString() || null;
   const minor = formData.get("minor")?.toString() || null;
+  const linkedin_url = formData.get("linkedin_url")?.toString() || null;
 
   // Prepare update object
   const updateData: {
@@ -39,6 +40,7 @@ export async function updateProfile(formData: FormData) {
     major?: string | null;
     major2?: string | null;
     minor?: string | null;
+    linkedin_url?: string | null;
   } = {};
 
   if (graduation_year) {
@@ -51,6 +53,7 @@ export async function updateProfile(formData: FormData) {
   updateData.major = major || null;
   updateData.major2 = major2 || null;
   updateData.minor = minor || null;
+  updateData.linkedin_url = linkedin_url || null;
 
   // Update the database
   const { error: updateError } = await supabase

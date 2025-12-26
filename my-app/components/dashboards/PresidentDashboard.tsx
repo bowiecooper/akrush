@@ -9,24 +9,24 @@ type UserData = {
   [key: string]: any;
 };
 
-type ActiveDashboardProps = {
+type PresidentDashboardProps = {
   userData: UserData;
 };
 
-export default async function ActiveDashboard({ userData }: ActiveDashboardProps) {
+export default async function PresidentDashboard({ userData }: PresidentDashboardProps) {
   const supabase = await createClient();
 
   return (
     <section className="pt-32 pb-20 bg-[#E5F2FF] flex-1">
       <div className="mx-auto max-w-7xl px-6 h-full">
         <h1 className="text-3xl md:text-5xl font-extrabold text-[#4D84C6] text-center mb-12">
-          BROTHERS DASHBOARD
+          PRESIDENT DASHBOARD
         </h1>
         
         <div className="bg-white border border-gray-200 rounded-lg p-8 shadow-sm">
           <h2 className="text-2xl font-bold text-[#4D84C6] mb-4">Welcome, {userData.full_name}!</h2>
           <p className="text-black mb-6">
-            This is your active brothers dashboard. Here you can access brotherhood resources and information.
+            This is your President dashboard. Here you have full access to manage all aspects of the fraternity and rush process.
           </p>
           
           <div className="space-y-4">

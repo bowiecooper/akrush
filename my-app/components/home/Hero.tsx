@@ -49,7 +49,7 @@ export default function Hero() {
           </div>
 
           <div className="mt-8 flex justify-center">
-            <Link href="/apply" className="pointer-events-auto">
+            <Link href="/rush" className="pointer-events-auto cursor-pointer">
               <Button variant="ghost" className="text-white border-[#4D84C6] text-sm font-semibold">
                 WINTER '26 APPLICATION
               </Button>

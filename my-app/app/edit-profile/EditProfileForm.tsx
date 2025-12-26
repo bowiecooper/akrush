@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { updateProfile } from "./actions";
+import HeadshotUpload from "@/components/HeadshotUpload";
 
 type UserData = {
   id: string;
@@ -16,14 +17,16 @@ type UserData = {
   role: string | null;
   title: string | null;
   headshot_path: string | null;
+  linkedin_url: string | null;
   [key: string]: any;
 };
 
 type EditProfileFormProps = {
   userData: UserData;
+  userId: string;
 };
 
-export default function EditProfileForm({ userData }: EditProfileFormProps) {
+export default function EditProfileForm({ userData, userId }: EditProfileFormProps) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -49,8 +52,8 @@ export default function EditProfileForm({ userData }: EditProfileFormProps) {
   return (
     <form action={handleSubmit} className="flex flex-col h-full">
       <div className="flex flex-col md:flex-row gap-8 flex-1">
-        {/* Profile Picture Placeholder */}
-        <div className="flex-shrink-0">
+        {/* Profile Picture Section */}
+        <div className="flex-shrink-0 space-y-4">
           <div className="w-48 h-48 rounded-full overflow-hidden bg-gray-200 flex items-center justify-center border-4 border-[#4D84C6]">
             {userData.headshot_path ? (
               <Image
@@ -66,6 +69,10 @@ export default function EditProfileForm({ userData }: EditProfileFormProps) {
               </span>
             )}
           </div>
+          <HeadshotUpload 
+            userId={userId} 
+            currentHeadshotPath={userData.headshot_path}
+          />
         </div>
 
         {/* User Information */}
@@ -78,7 +85,7 @@ export default function EditProfileForm({ userData }: EditProfileFormProps) {
 
           {/* Email - Read Only */}
           <div>
-            <span className="font-semibold text-[#4D84C6]">Email</span>{" "}
+            <span className="font-semibold text-[#4D84C6]">Email:</span>{" "}
             <span className="text-black">{userData.email}</span>
           </div>
 
@@ -142,10 +149,25 @@ export default function EditProfileForm({ userData }: EditProfileFormProps) {
             />
           </div>
 
+          {/* LinkedIn URL - Editable */}
+          <div>
+            <label htmlFor="linkedin_url" className="font-semibold text-[#4D84C6] block mb-1">
+              LinkedIn URL (Optional):
+            </label>
+            <input
+              type="url"
+              id="linkedin_url"
+              name="linkedin_url"
+              defaultValue={userData.linkedin_url || ""}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4D84C6] text-black"
+              placeholder="https://linkedin.com/in/yourprofile"
+            />
+          </div>
+
           {/* Permission Level - Read Only (if applicable) */}
           {showStatus && statusDisplay && (
             <div>
-              <span className="font-semibold text-[#4D84C6]">Permission Level:</span>{" "}
+              <span className="font-semibold text-[#4D84C6]">Permissions Granted:</span>{" "}
               <span className="text-black">{statusDisplay}</span>
             </div>
           )}

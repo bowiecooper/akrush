@@ -6,7 +6,13 @@ import RusheeDashboard from "@/components/dashboards/RusheeDashboard";
 import ActiveDashboard from "@/components/dashboards/ActiveDashboard";
 import MemcoDashboard from "@/components/dashboards/MemcoDashboard";
 import DirectorDashboard from "@/components/dashboards/DirectorDashboard";
-import EboardDashboard from "@/components/dashboards/EboardDashboard";
+import PresidentDashboard from "@/components/dashboards/PresidentDashboard";
+import MORDashboard from "@/components/dashboards/MORDashboard";
+import VPInternalDashboard from "@/components/dashboards/VPInternalDashboard";
+import VPExternalDashboard from "@/components/dashboards/VPExternalDashboard";
+import VPFinanceDashboard from "@/components/dashboards/VPFinanceDashboard";
+import VPOperationsDashboard from "@/components/dashboards/VPOperationsDashboard";
+import EboardTitleError from "@/components/dashboards/EboardTitleError";
 
 type UserRole = "rushee" | "active" | "memco" | "director" | "eboard";
 
@@ -29,8 +35,9 @@ export default async function Dashboard() {
     .eq("user_id", user.id)
     .single();
 
-  if (brotherError || !brotherData) {
-    redirect("/auth/error");
+  // If no record exists or full_name is missing, redirect to signup
+  if (brotherError || !brotherData || !brotherData.full_name) {
+    redirect("/auth/signup");
   }
 
   const userRole = brotherData.role?.toLowerCase() as UserRole | null;
@@ -41,15 +48,34 @@ export default async function Dashboard() {
     redirect("/auth/error");
   }
 
-  // Render appropriate dashboard based on role
+  // For eboard, check title to determine which dashboard to show
+  const userTitle = brotherData.title as string | null;
+  
+  // Valid eboard titles
+  const validEboardTitles = ["President", "MOR", "VP Internal", "VP External", "VP Finance", "VP Operations"];
+  const hasValidEboardTitle = userRole === "eboard" && userTitle && validEboardTitles.includes(userTitle);
+  
+  // Render appropriate dashboard based on role and title
   return (
-    <main className="min-h-screen bg-[#E5F2FF]">
+    <main className="min-h-screen bg-[#E5F2FF] flex flex-col">
       <Navbar />
-      {userRole === "rushee" && <RusheeDashboard userData={brotherData} />}
-      {userRole === "active" && <ActiveDashboard userData={brotherData} />}
-      {userRole === "memco" && <MemcoDashboard userData={brotherData} />}
-      {userRole === "director" && <DirectorDashboard userData={brotherData} />}
-      {userRole === "eboard" && <EboardDashboard userData={brotherData} />}
+      <div className="flex-1">
+        {userRole === "rushee" && <RusheeDashboard userData={brotherData} />}
+        {userRole === "active" && <ActiveDashboard userData={brotherData} />}
+        {userRole === "memco" && <MemcoDashboard userData={brotherData} />}
+        {userRole === "director" && <DirectorDashboard userData={brotherData} />}
+        {userRole === "eboard" && (
+          <>
+            {userTitle === "President" && <PresidentDashboard userData={brotherData} />}
+            {userTitle === "MOR" && <MORDashboard userData={brotherData} />}
+            {userTitle === "VP Internal" && <VPInternalDashboard userData={brotherData} />}
+            {userTitle === "VP External" && <VPExternalDashboard userData={brotherData} />}
+            {userTitle === "VP Finance" && <VPFinanceDashboard userData={brotherData} />}
+            {userTitle === "VP Operations" && <VPOperationsDashboard userData={brotherData} />}
+            {!hasValidEboardTitle && <EboardTitleError />}
+          </>
+        )}
+      </div>
       <Footer />
     </main>
   );

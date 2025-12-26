@@ -24,8 +24,9 @@ export default async function ProfilePage() {
     .eq("user_id", user.id)
     .single();
 
-  if (error || !userData) {
-    redirect("/auth/error");
+  // If no record exists or full_name is missing, redirect to signup
+  if (error || !userData || !userData.full_name) {
+    redirect("/auth/signup");
   }
 
   // Format majors
@@ -37,7 +38,7 @@ export default async function ProfilePage() {
   const role = userData.role?.toLowerCase();
   const showStatus = role === "memco" || role === "director" || role === "eboard";
   const statusDisplay = role === "memco" 
-    ? "On Memco" 
+    ? "Memco" 
     : (role === "director" || role === "eboard") && userData.title
     ? userData.title
     : null;
@@ -54,7 +55,7 @@ export default async function ProfilePage() {
           
           <div className="bg-white border border-gray-200 rounded-lg p-8 shadow-sm flex flex-col">
             <div className="flex flex-col md:flex-row gap-8">
-              {/* Profile Picture Placeholder */}
+              {/* Profile Picture Section */}
               <div className="flex-shrink-0">
                 <div className="w-48 h-48 rounded-full overflow-hidden bg-gray-200 flex items-center justify-center border-4 border-[#4D84C6]">
                   {userData.headshot_path ? (
@@ -79,7 +80,7 @@ export default async function ProfilePage() {
                   <span className="font-semibold text-[#4D84C6]">Name:</span> {userData.full_name}
                 </p>
                 <p>
-                  <span className="font-semibold text-[#4D84C6]">Email</span> {userData.email}
+                  <span className="font-semibold text-[#4D84C6]">Email:</span> {userData.email}
                 </p>
                 {userData.graduation_year && (
                   <p>
@@ -100,7 +101,20 @@ export default async function ProfilePage() {
                 )}
                 {showStatus && statusDisplay && (
                   <p>
-                    <span className="font-semibold text-[#4D84C6]">Permission Level:</span> {statusDisplay}
+                    <span className="font-semibold text-[#4D84C6]">Permissions Granted:</span> {statusDisplay}
+                  </p>
+                )}
+                {userData.linkedin_url && (
+                  <p>
+                    <span className="font-semibold text-[#4D84C6]">LinkedIn:</span>{" "}
+                    <a
+                      href={userData.linkedin_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[#4D84C6] hover:underline"
+                    >
+                      {userData.linkedin_url}
+                    </a>
                   </p>
                 )}
               </div>

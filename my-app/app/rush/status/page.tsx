@@ -2,9 +2,9 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import EditProfileForm from "./EditProfileForm";
+import ApplicationStatus from "./ApplicationStatus";
 
-export default async function EditProfilePage() {
+export default async function ApplicationStatusPage() {
   const supabase = await createClient();
 
   // Check authentication
@@ -28,22 +28,34 @@ export default async function EditProfilePage() {
     redirect("/auth/signup");
   }
 
+  // Check if user is a rushee
+  if (userData.role?.toLowerCase() !== "rushee") {
+    redirect("/dashboard");
+  }
+
+  // Check if application has been submitted
+  const rusheeStatus = userData.rushee_status || "APPLICATION_NOT_SUBMITTED";
+  if (rusheeStatus === "APPLICATION_NOT_SUBMITTED") {
+    redirect("/rush/submit");
+  }
+
+  // Route to appropriate page based on status
+  if (rusheeStatus === "CUT") {
+    redirect("/rush/cut");
+  }
+  
+  if (rusheeStatus === "BID") {
+    redirect("/rush/bid");
+  }
+  
+  if (rusheeStatus === "BID_ACCEPTED") {
+    redirect("/rush/bid-accepted");
+  }
+
   return (
     <main className="min-h-screen bg-[#E5F2FF] flex flex-col">
       <Navbar />
-      
-      <section className="flex-1 pt-32 pb-20 bg-[#E5F2FF]">
-        <div className="mx-auto max-w-7xl px-6 h-full">
-          <h1 className="text-3xl md:text-5xl font-extrabold text-[#4D84C6] text-center mb-12">
-            EDIT PROFILE
-          </h1>
-          
-          <div className="bg-white border border-gray-200 rounded-lg p-8 shadow-sm flex flex-col">
-            <EditProfileForm userData={userData} userId={user.id} />
-          </div>
-        </div>
-      </section>
-
+      <ApplicationStatus userData={userData} />
       <Footer />
     </main>
   );

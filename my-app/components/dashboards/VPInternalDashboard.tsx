@@ -9,24 +9,24 @@ type UserData = {
   [key: string]: any;
 };
 
-type ActiveDashboardProps = {
+type VPInternalDashboardProps = {
   userData: UserData;
 };
 
-export default async function ActiveDashboard({ userData }: ActiveDashboardProps) {
+export default async function VPInternalDashboard({ userData }: VPInternalDashboardProps) {
   const supabase = await createClient();
 
   return (
     <section className="pt-32 pb-20 bg-[#E5F2FF] flex-1">
       <div className="mx-auto max-w-7xl px-6 h-full">
         <h1 className="text-3xl md:text-5xl font-extrabold text-[#4D84C6] text-center mb-12">
-          BROTHERS DASHBOARD
+          VP INTERNAL DASHBOARD
         </h1>
         
         <div className="bg-white border border-gray-200 rounded-lg p-8 shadow-sm">
           <h2 className="text-2xl font-bold text-[#4D84C6] mb-4">Welcome, {userData.full_name}!</h2>
           <p className="text-black mb-6">
-            This is your active brothers dashboard. Here you can access brotherhood resources and information.
+            This is your VP Internal dashboard. Here you have access to manage internal fraternity operations and brotherhood activities.
           </p>
           
           <div className="space-y-4">
