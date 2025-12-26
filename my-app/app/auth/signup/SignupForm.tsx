@@ -27,7 +27,6 @@ export default function SignupForm({ userEmail, userId }: SignupFormProps) {
     const result = await completeSignup(formData);
     
     if (result?.error) {
-      alert("Error completing signup: " + result.error);
       setIsSubmitting(false);
     } else {
       router.push("/dashboard");

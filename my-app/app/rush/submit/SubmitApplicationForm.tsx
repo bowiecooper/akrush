@@ -170,7 +170,6 @@ export default function SubmitApplicationForm({ userId }: SubmitApplicationFormP
       const urlWithCacheBust = `${publicUrl}?t=${timestamp}`
 
       setResumeUrl(urlWithCacheBust)
-      alert('Resume uploaded successfully!')
 
     } catch (error) {
       alert('Error uploading resume: ' + (error as Error).message)
@@ -221,10 +220,9 @@ export default function SubmitApplicationForm({ userId }: SubmitApplicationFormP
       if (resumeInputRef.current) {
         resumeInputRef.current.value = '';
       }
-      alert('Resume deleted successfully!')
 
     } catch (error) {
-      alert('Error deleting resume: ' + (error as Error).message)
+      // Error deleting resume - silently fail
     } finally {
       setResumeUploading(false)
     }
@@ -241,7 +239,6 @@ export default function SubmitApplicationForm({ userId }: SubmitApplicationFormP
     const result = await submitApplication(formData);
     
     if (result?.error) {
-      alert("Error submitting application: " + result.error);
       setIsSubmitting(false);
     } else {
       router.push("/rush/status");
@@ -1353,6 +1350,9 @@ export default function SubmitApplicationForm({ userId }: SubmitApplicationFormP
                 <label className="text-xl font-bold text-[#4D84C6] block mb-2">
                   Resume Upload
                 </label>
+                <p className="text-sm text-gray-600 mb-3">
+                  Please upload a PDF, DOC, or DOCX file.
+                </p>
                 <div className="space-y-2">
                   {/* Hidden file input */}
                   <input

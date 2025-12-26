@@ -34,13 +34,11 @@ export default function HeadshotUpload({
       
       // Validate file type
       if (!file.type.startsWith('image/')) {
-        alert('Please upload an image file')
         return
       }
 
       // Validate file size (max 5MB)
       if (file.size > 5 * 1024 * 1024) {
-        alert('Image must be smaller than 5MB')
         return
       }
 
@@ -65,7 +63,6 @@ export default function HeadshotUpload({
       // Call callback if provided (for signup form - don't update DB yet)
       if (onUploadSuccess) {
         onUploadSuccess(publicUrl)
-        alert('Headshot uploaded successfully!')
       } else {
         // Update database with new headshot path (for edit profile)
         const { error: dbError } = await supabase
@@ -75,13 +72,12 @@ export default function HeadshotUpload({
 
         if (dbError) throw dbError
 
-        alert('Headshot uploaded successfully!')
         // Refresh the page to show updated headshot
         window.location.reload()
       }
 
     } catch (error) {
-      alert('Error uploading headshot: ' + (error as Error).message)
+      // Error uploading headshot - silently fail
     } finally {
       setUploading(false)
     }
@@ -118,14 +114,12 @@ export default function HeadshotUpload({
         .eq('user_id', userId)
 
       if (dbError) throw dbError
-
-      alert('Headshot deleted successfully!')
       
       // Refresh the page to show updated headshot
       window.location.reload()
 
     } catch (error) {
-      alert('Error deleting headshot: ' + (error as Error).message)
+      // Error deleting headshot - silently fail
     } finally {
       setDeleting(false)
     }
