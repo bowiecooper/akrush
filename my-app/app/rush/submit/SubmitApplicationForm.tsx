@@ -18,17 +18,41 @@ export default function SubmitApplicationForm({ userId }: SubmitApplicationFormP
   const [major2Other, setMajor2Other] = useState(false);
   const [minorOther, setMinorOther] = useState(false);
   const [businessInterestOther, setBusinessInterestOther] = useState(false);
+  const [selectedBusinessInterests, setSelectedBusinessInterests] = useState<Set<string>>(new Set());
+  const [businessInterestError, setBusinessInterestError] = useState<string | null>(null);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const [whyAkpsiWordCount, setWhyAkpsiWordCount] = useState(0);
   const [q1WordCount, setQ1WordCount] = useState(0);
   const [q2WordCount, setQ2WordCount] = useState(0);
   const [resumeUploading, setResumeUploading] = useState(false);
   const [resumeUrl, setResumeUrl] = useState<string | null>(null);
   const resumeInputRef = useRef<HTMLInputElement>(null);
+  const businessInterestRef = useRef<HTMLDivElement>(null);
   const supabase = createClient();
 
   // Helper function to count words
   const countWords = (text: string): number => {
     return text.trim().split(/\s+/).filter(word => word.length > 0).length;
+  };
+
+  // Helper function to filter input to only allow letters and whitespace
+  const filterAlphabeticOnly = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    // Only allow letters (a-z, A-Z) and whitespace
+    const filtered = value.replace(/[^a-zA-Z\s]/g, '');
+    if (value !== filtered) {
+      e.target.value = filtered;
+    }
+  };
+
+  // Helper function to filter input to only allow letters, whitespace, and commas
+  const filterAlphabeticWithCommas = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    // Only allow letters (a-z, A-Z), whitespace, and commas
+    const filtered = value.replace(/[^a-zA-Z\s,]/g, '');
+    if (value !== filtered) {
+      e.target.value = filtered;
+    }
   };
 
   // Handler for Why AKPsi Response
@@ -95,6 +119,21 @@ export default function SubmitApplicationForm({ userId }: SubmitApplicationFormP
       if (ref) ref.checked = false;
     });
     setMinorOther(false);
+  };
+  
+  // Handler for business interest checkbox changes
+  const handleBusinessInterestChange = (value: string, checked: boolean) => {
+    const newSet = new Set(selectedBusinessInterests);
+    if (checked) {
+      newSet.add(value);
+    } else {
+      newSet.delete(value);
+    }
+    setSelectedBusinessInterests(newSet);
+    // Clear error when user makes a selection
+    if (businessInterestError) {
+      setBusinessInterestError(null);
+    }
   };
 
   // Phone number formatting
@@ -228,7 +267,33 @@ export default function SubmitApplicationForm({ userId }: SubmitApplicationFormP
     }
   };
 
-  const handleSubmit = async (formData: FormData) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault(); // Prevent default form submission to preserve form data
+    
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    
+    // Validate business interest - at least one must be selected
+    const businessInterestValues = formData.getAll("rushee_business_interest");
+    const businessInterestOtherText = formData.get("rushee_business_interest_other")?.toString();
+    const hasOtherSelected = businessInterestValues.some(v => v.toString() === "OTHER");
+    const hasNonOtherSelected = businessInterestValues.some(v => v.toString() !== "OTHER");
+    
+    // Must have at least one non-OTHER selection, OR OTHER selected with text provided
+    if (businessInterestValues.length === 0 || (hasOtherSelected && !hasNonOtherSelected && (!businessInterestOtherText || businessInterestOtherText.trim().length === 0))) {
+      setBusinessInterestError("Please select at least one business interest.");
+      setIsSubmitting(false);
+      
+      // Scroll to business interest section
+      if (businessInterestRef.current) {
+        businessInterestRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+      return;
+    }
+    
+    // Clear any previous errors
+    setBusinessInterestError(null);
+    setSubmitError(null);
     setIsSubmitting(true);
     
     // Add resume URL to form data if it exists
@@ -239,7 +304,11 @@ export default function SubmitApplicationForm({ userId }: SubmitApplicationFormP
     const result = await submitApplication(formData);
     
     if (result?.error) {
+      setSubmitError(result.error);
       setIsSubmitting(false);
+      // Don't clear form data - form state is maintained by the browser
+      // Scroll to top to show error
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
       router.push("/rush/status");
     }
@@ -253,7 +322,12 @@ export default function SubmitApplicationForm({ userId }: SubmitApplicationFormP
         </h1>
         
         <div className="bg-white border border-gray-200 rounded-lg p-8 shadow-sm">
-          <form action={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {submitError && (
+              <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
+                <p className="text-red-600 font-semibold">Error: {submitError}</p>
+              </div>
+            )}
             <p className="text-black mb-6 text-center">
               Fill out and submit your rush application. Applications are due January 22.
             </p>
@@ -421,6 +495,7 @@ export default function SubmitApplicationForm({ userId }: SubmitApplicationFormP
                       type="text"
                       name="gender_other"
                       placeholder="Specify other gender"
+                      onChange={filterAlphabeticOnly}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4D84C6] text-black"
                     />
                   )}
@@ -656,6 +731,7 @@ export default function SubmitApplicationForm({ userId }: SubmitApplicationFormP
                       type="text"
                       name="rushee_major_other"
                       placeholder="Specify other major"
+                      onChange={filterAlphabeticOnly}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4D84C6] text-black"
                     />
                   )}
@@ -795,6 +871,7 @@ export default function SubmitApplicationForm({ userId }: SubmitApplicationFormP
                       type="text"
                       name="rushee_major2_other"
                       placeholder="Specify other major"
+                      onChange={filterAlphabeticOnly}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4D84C6] text-black"
                     />
                   )}
@@ -945,6 +1022,7 @@ export default function SubmitApplicationForm({ userId }: SubmitApplicationFormP
                       type="text"
                       name="rushee_minor_other"
                       placeholder="Specify other minor"
+                      onChange={filterAlphabeticOnly}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4D84C6] text-black"
                     />
                   )}
@@ -1170,16 +1248,20 @@ export default function SubmitApplicationForm({ userId }: SubmitApplicationFormP
               </div>
 
               {/* Business Interest */}
-              <div>
+              <div ref={businessInterestRef}>
                 <label className="text-xl font-bold text-[#4D84C6] block mb-2">
-                  Business Interest
+                  Business Interest <span className="text-red-500">*</span>
                 </label>
+                {businessInterestError && (
+                  <p className="text-red-500 text-sm mb-2">{businessInterestError}</p>
+                )}
                 <div className="space-y-2">
                   <label className="flex items-center">
                     <input
                       type="checkbox"
                       name="rushee_business_interest"
                       value="INVESTMENT_BANKING"
+                      onChange={(e) => handleBusinessInterestChange("INVESTMENT_BANKING", e.target.checked)}
                       className="mr-2"
                     />
                     <span className="text-black">Investment Banking</span>
@@ -1189,6 +1271,7 @@ export default function SubmitApplicationForm({ userId }: SubmitApplicationFormP
                       type="checkbox"
                       name="rushee_business_interest"
                       value="PRIVATE_EQUITY"
+                      onChange={(e) => handleBusinessInterestChange("PRIVATE_EQUITY", e.target.checked)}
                       className="mr-2"
                     />
                     <span className="text-black">Private Equity</span>
@@ -1198,6 +1281,7 @@ export default function SubmitApplicationForm({ userId }: SubmitApplicationFormP
                       type="checkbox"
                       name="rushee_business_interest"
                       value="CONSULTING"
+                      onChange={(e) => handleBusinessInterestChange("CONSULTING", e.target.checked)}
                       className="mr-2"
                     />
                     <span className="text-black">Consulting</span>
@@ -1207,6 +1291,7 @@ export default function SubmitApplicationForm({ userId }: SubmitApplicationFormP
                       type="checkbox"
                       name="rushee_business_interest"
                       value="VENTURE_CAPITAL"
+                      onChange={(e) => handleBusinessInterestChange("VENTURE_CAPITAL", e.target.checked)}
                       className="mr-2"
                     />
                     <span className="text-black">Venture Capital</span>
@@ -1216,6 +1301,7 @@ export default function SubmitApplicationForm({ userId }: SubmitApplicationFormP
                       type="checkbox"
                       name="rushee_business_interest"
                       value="REAL_ESTATE"
+                      onChange={(e) => handleBusinessInterestChange("REAL_ESTATE", e.target.checked)}
                       className="mr-2"
                     />
                     <span className="text-black">Real Estate</span>
@@ -1225,6 +1311,7 @@ export default function SubmitApplicationForm({ userId }: SubmitApplicationFormP
                       type="checkbox"
                       name="rushee_business_interest"
                       value="ENTREPRENEURSHIP"
+                      onChange={(e) => handleBusinessInterestChange("ENTREPRENEURSHIP", e.target.checked)}
                       className="mr-2"
                     />
                     <span className="text-black">Entrepreneurship</span>
@@ -1234,6 +1321,7 @@ export default function SubmitApplicationForm({ userId }: SubmitApplicationFormP
                       type="checkbox"
                       name="rushee_business_interest"
                       value="MARKETING"
+                      onChange={(e) => handleBusinessInterestChange("MARKETING", e.target.checked)}
                       className="mr-2"
                     />
                     <span className="text-black">Marketing</span>
@@ -1243,6 +1331,7 @@ export default function SubmitApplicationForm({ userId }: SubmitApplicationFormP
                       type="checkbox"
                       name="rushee_business_interest"
                       value="SUPPLY_CHAIN"
+                      onChange={(e) => handleBusinessInterestChange("SUPPLY_CHAIN", e.target.checked)}
                       className="mr-2"
                     />
                     <span className="text-black">Supply Chain</span>
@@ -1252,6 +1341,7 @@ export default function SubmitApplicationForm({ userId }: SubmitApplicationFormP
                       type="checkbox"
                       name="rushee_business_interest"
                       value="WEALTH_ASSET_MANAGEMENT"
+                      onChange={(e) => handleBusinessInterestChange("WEALTH_ASSET_MANAGEMENT", e.target.checked)}
                       className="mr-2"
                     />
                     <span className="text-black">Wealth/Asset Management</span>
@@ -1261,6 +1351,7 @@ export default function SubmitApplicationForm({ userId }: SubmitApplicationFormP
                       type="checkbox"
                       name="rushee_business_interest"
                       value="FINANCE_OTHER"
+                      onChange={(e) => handleBusinessInterestChange("FINANCE_OTHER", e.target.checked)}
                       className="mr-2"
                     />
                     <span className="text-black">Finance (Other)</span>
@@ -1270,6 +1361,7 @@ export default function SubmitApplicationForm({ userId }: SubmitApplicationFormP
                       type="checkbox"
                       name="rushee_business_interest"
                       value="LAW"
+                      onChange={(e) => handleBusinessInterestChange("LAW", e.target.checked)}
                       className="mr-2"
                     />
                     <span className="text-black">Law</span>
@@ -1279,6 +1371,7 @@ export default function SubmitApplicationForm({ userId }: SubmitApplicationFormP
                       type="checkbox"
                       name="rushee_business_interest"
                       value="HEALTHCARE"
+                      onChange={(e) => handleBusinessInterestChange("HEALTHCARE", e.target.checked)}
                       className="mr-2"
                     />
                     <span className="text-black">Healthcare</span>
@@ -1288,6 +1381,7 @@ export default function SubmitApplicationForm({ userId }: SubmitApplicationFormP
                       type="checkbox"
                       name="rushee_business_interest"
                       value="SUSTAINABILITY"
+                      onChange={(e) => handleBusinessInterestChange("SUSTAINABILITY", e.target.checked)}
                       className="mr-2"
                     />
                     <span className="text-black">Sustainability</span>
@@ -1297,6 +1391,7 @@ export default function SubmitApplicationForm({ userId }: SubmitApplicationFormP
                       type="checkbox"
                       name="rushee_business_interest"
                       value="SOFTWARE_ENGINEERING"
+                      onChange={(e) => handleBusinessInterestChange("SOFTWARE_ENGINEERING", e.target.checked)}
                       className="mr-2"
                     />
                     <span className="text-black">Software Engineering</span>
@@ -1306,6 +1401,7 @@ export default function SubmitApplicationForm({ userId }: SubmitApplicationFormP
                       type="checkbox"
                       name="rushee_business_interest"
                       value="TRADING"
+                      onChange={(e) => handleBusinessInterestChange("TRADING", e.target.checked)}
                       className="mr-2"
                     />
                     <span className="text-black">Trading</span>
@@ -1315,6 +1411,7 @@ export default function SubmitApplicationForm({ userId }: SubmitApplicationFormP
                       type="checkbox"
                       name="rushee_business_interest"
                       value="ENGINEERING_OTHER"
+                      onChange={(e) => handleBusinessInterestChange("ENGINEERING_OTHER", e.target.checked)}
                       className="mr-2"
                     />
                     <span className="text-black">Engineering (Other)</span>
@@ -1324,7 +1421,10 @@ export default function SubmitApplicationForm({ userId }: SubmitApplicationFormP
                       type="checkbox"
                       name="rushee_business_interest"
                       value="OTHER"
-                      onChange={(e) => setBusinessInterestOther(e.target.checked)}
+                      onChange={(e) => {
+                        setBusinessInterestOther(e.target.checked);
+                        handleBusinessInterestChange("OTHER", e.target.checked);
+                      }}
                       className="mr-2"
                     />
                     <span className="text-black">Other</span>
@@ -1335,6 +1435,14 @@ export default function SubmitApplicationForm({ userId }: SubmitApplicationFormP
                         type="text"
                         name="rushee_business_interest_other"
                         placeholder="Specify other business interest"
+                        onChange={(e) => {
+                          // Filter input to only allow letters, whitespace, and commas
+                          filterAlphabeticWithCommas(e);
+                          // Clear error when user types in Other field
+                          if (businessInterestError) {
+                            setBusinessInterestError(null);
+                          }
+                        }}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4D84C6] text-black"
                       />
                       <p className="text-sm text-gray-600 mt-1">

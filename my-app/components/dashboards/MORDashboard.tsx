@@ -16,6 +16,15 @@ type MORDashboardProps = {
 export default async function MORDashboard({ userData }: MORDashboardProps) {
   const supabase = await createClient();
 
+  // Get RushSettings to check current_stage
+  const { data: rushSettings } = await supabase
+    .from("RushSettings")
+    .select("current_stage")
+    .single();
+
+  const currentStage = rushSettings?.current_stage || null;
+  const isTrackerDisabled = currentStage === "OPEN";
+
   return (
     <section className="pt-32 pb-20 bg-[#E5F2FF] flex-1">
       <div className="mx-auto max-w-7xl px-6 h-full">
@@ -36,6 +45,19 @@ export default async function MORDashboard({ userData }: MORDashboardProps) {
                 <p className="text-black">View/change user profile.</p>
               </div>
             </Link>
+            {isTrackerDisabled ? (
+              <div className="p-4 bg-gray-100 rounded-lg opacity-50 cursor-not-allowed">
+                <h3 className="font-semibold text-gray-500 mb-2">Rushee Tracker</h3>
+                <p className="text-gray-500">Track and manage rushee applications.</p>
+              </div>
+            ) : (
+              <Link href="/rush/tracker" className="block">
+                <div className="p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                  <h3 className="font-semibold text-black mb-2">Rushee Tracker</h3>
+                  <p className="text-black">Track and manage rushee applications.</p>
+                </div>
+              </Link>
+            )}
           </div>
         </div>
       </div>

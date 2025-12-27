@@ -133,7 +133,7 @@ export async function submitApplication(formData: FormData) {
   
   // Then, if "OTHER" is selected, process and append the comma-separated values
   const hasOther = businessInterestValues.some(v => v.toString() === "OTHER");
-  if (hasOther && businessInterestOther) {
+  if (hasOther && businessInterestOther && businessInterestOther.trim().length > 0) {
     // Split by commas, trim each entry, and format as FIRSTWORD_SECONDWORD
     const otherInterests = businessInterestOther
       .split(',')
@@ -145,10 +145,13 @@ export async function submitApplication(formData: FormData) {
     businessInterestArray.push(...otherInterests);
   }
   
+  // Validate that at least one business interest is selected
+  if (businessInterestArray.length === 0) {
+    return { error: "Please select at least one business interest" };
+  }
+  
   // Join all interests with commas
-  const rushee_business_interest = businessInterestArray.length > 0 
-    ? businessInterestArray.join(',') 
-    : null;
+  const rushee_business_interest = businessInterestArray.join(',');
 
   // Accommodations (text as-is)
   const rushee_accomodations = formData.get("rushee_accomodations")?.toString() || null;
